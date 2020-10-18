@@ -1,0 +1,6 @@
+
+
+PUT http://localhost:4000/api/article/updateArticle/5f86a440530cc32d6c099a7f
+
+
+Get http://localhost:4000/api/article/getArticle
