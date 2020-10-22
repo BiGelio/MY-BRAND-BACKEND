@@ -1,26 +1,21 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import model from "../models/usersModel.js";
-import getSecret from "../config/config.js"
 import validateUser from "../validations/userValidation.js"
 const usersModel = mongoose.model("users");
-const accessToken = process.env.ACCESS_TOKEN;
 export const getUser = (req, res) => {
         jwt.verify(
             req.token,
-            getSecret(),
+            process.env.ACCESS_TOKEN,
             (err, token) => {
                 if (!err) {
                     const data = usersModel.find((err, docs) => {
                         if (err) {
                             res.sendStatus(403)
-
                         } else { res.json({ docs }) }
-
                     })
                 } else {
                     res.json({ Message: "Please login as admin to view all users!" })
-
                 }
             })
     }
@@ -74,7 +69,7 @@ export const createUser = (req, res) => {
 export const updateUser = (req, res) => {
     jwt.verify(
         req.token,
-        getSecret(),
+        process.env.ACCESS_TOKEN,
         (err, token) => {
             if (!err) {
                 const data = usersModel.findByIdAndUpdate({ _id: req.params.id }, { date: new Date() }, (err) => {
@@ -94,7 +89,7 @@ export const updateUser = (req, res) => {
 export const deleteUser = (req, res) => {
     jwt.verify(
         req.token,
-        getSecret(),
+        process.env.ACCESS_TOKEN,
         (err, token) => {
             if (!err) {
                 usersModel.remove({ _id: req.params.id }, (err) => {
@@ -124,7 +119,8 @@ export const loginUser = (req, res) => {
             if (user) {
                 //section for generating token
 
-                jwt.sign({ user }, getSecret(), (err, token) => {
+
+                jwt.sign({ user }, process.env.ACCESS_TOKEN, (err, token) => {
                     if (err) {
                         console.log(err)
                         res.json({ Message: "Login failed, Try again!" })
