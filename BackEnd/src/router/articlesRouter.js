@@ -1,17 +1,17 @@
-const express = require("express");
-const controller = require("../controller/articlesController");
+import express from "express";
+import { getArticle, postArticle, updateArticle, deleteArticle } from "../controller/articlesController.js";
 const routes = express.Router();
 
 // Get request
-routes.get('/getArticle', controller.getArticle);
+routes.get('/getArticle', getArticle);
 
 // Post request
-routes.post('/postArticle', controller.postArticle);
+routes.post('/postArticle', postArticle);
 
 // put request
-routes.put('/updateArticle/:id', controller.updateArticle);
+routes.put('/updateArticle/:id', updateArticle);
 
 // Delete request
-routes.delete('/deleteArticle/:id', controller.deleteArticle);
+routes.delete('/deleteArticle/:id', deleteArticle);
 
-module.exports = routes;
+export default routes;

@@ -1,16 +1,19 @@
 // import express package
-const express = require("express");
-require("dotenv/config");
+import express from "express";
+import dotenv from 'dotenv';
+dotenv.config()
+
 const app = express();
 // Import router module
-const articlesRoute = require("./src/router/articlesRouter.js");
-const usersRoute = require("./src/router/usersRouter.js");
-const bodyParser = require("body-parser");
+import articlesRoute from "./src/router/articlesRouter.js";
+import usersRoute from "./src/router/usersRouter.js";
+import bodyParser from "body-parser";
 app.use(bodyParser.json());
 app.use('/api/article', articlesRoute);
 app.use('/api/user', usersRoute);
-const mongoose = require("mongoose");
-mongoose.connect(process.env.db_url + "/articlesDatabase", { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+import mongoose from "mongoose";
+
+mongoose.connect(process.env.DB_URL + "/articlesDatabase", { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) throw new err;
     console.log("DB connected successfully!")
 });
