@@ -1,18 +1,22 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import model from "../models/usersModel.js";
-import {validateUser,validateUserLogin} from "../validations/userValidation.js";
-import { verifyUserBeforeDelete, verifyUserBeforeGet, verifyUserBeforeUpdate } from "../middleware/token.verification.middleware.js"
+import { validateUser, validateUserLogin } from "../validations/userValidation.js";
+
 const usersModel = mongoose.model("users");
 export const getUser = (req, res) => {
         /*Check if user has token required to access this router*/
         const verified = jwt.verify(
             req.token,
-            process.env.ACCESS_TOKEN, verifyUserBeforeGet
+            process.env.ADMIN_ACCESS_TOKEN, (err) => {
+                if (err) {
+                    return res.status(401).json({ Message: "Please login as admin to view all users!" })
+                }
+            }
         )
         const data = usersModel.find((err, docs) => {
             if (err) {
-                return res.sendStatus(403)
+                return res.sendStatus(401)
             }
             res.status(202).json({ docs })
 
@@ -24,7 +28,7 @@ export const createUser = (req, res) => {
     /* Validate user inputs*/
     const valid = validateUser.validate(req.body);
     if (valid.error) {
-        return res.status(406).json({ Message: valid.error.details[0].message });
+        return res.status(400).json({ Message: valid.error.details[0].message });
     }
 
     const { firstName, lastName, email, password } = req.body;
@@ -45,7 +49,7 @@ export const createUser = (req, res) => {
         /*Check if user  exists or not*/
         const userOne = users.find(u => { return u.email === email });
         if (userOne) {
-            return res.status(406).json({ Message: "User already exist!" })
+            return res.status(409).json({ Message: "User already exist!" })
         }
 
         const newUser = new model(user);
@@ -57,14 +61,14 @@ export const createUser = (req, res) => {
                     Message: "Error ocurred during creation of user, try again !"
                 });
             }
-             jwt.sign({ user }, process.env.ACCESS_TOKEN, (err, token) => {
-            if (err) {
-                return res.status(404).json({ Message: "Login failed, Try again!" })
-            }
-             res.status(201).json({ Message: "User created successfully! You can login now",token });
+            jwt.sign({ user }, process.env.ACCESS_TOKEN, (err, token) => {
+                if (err) {
+                    return res.status(404).json({ Message: "Login failed, Try again!" })
+                }
+                res.status(201).json({ Message: "User created successfully! You can login now", token });
 
-        })
-           
+            })
+
         })
     });
 }
@@ -75,7 +79,11 @@ export const updateUser = (req, res) => {
         jwt.verify(
             req.token,
             process.env.ACCESS_TOKEN,
-            verifyUserBeforeUpdate
+            (err) => {
+                if (err) {
+                    return res.status(401).json({ Message: "Please login to update your data!" })
+                }
+            }
         )
         const data = usersModel.findByIdAndUpdate({ _id: req.params.id }, { date: new Date() }, (err) => {
             if (err) {
@@ -89,8 +97,12 @@ export const updateUser = (req, res) => {
 export const deleteUser = (req, res) => {
     jwt.verify(
         req.token,
-        process.env.ACCESS_TOKEN,
-        verifyUserBeforeDelete
+        process.env.ACCESS_TOKEN || process.env.ADMIN_ACCESS_TOKEN,
+        (err) => {
+            if (err) {
+                return res.status(401).json({ Message: "Please login to delete your account!" })
+            }
+        }
     )
     usersModel.remove({ _id: req.params.id }, (err) => {
         if (err) {
@@ -121,15 +133,30 @@ export const loginUser = (req, res) => {
             return res.status(400).json({ Message: "User does not exists!" })
         }
         /*section for generating token*/
-
-        jwt.sign({ user }, process.env.ACCESS_TOKEN, (err, token) => {
-            if (err) {
-                return res.status(404).json({ Message: "Login failed, Try again!" })
-            }
-            res.json({
-                token
+        if (user.role === 'member') {
+            jwt.sign({ user }, process.env.ACCESS_TOKEN, (err, token) => {
+                if (err) {
+                    return res.status(401).json({ Message: "Login failed, Try again!" })
+                }
+                res.json({
+                    Message: "Welcome " + user.firstName + " " + user.lastName,
+                    Role: "member",
+                    token
+                })
             })
-        })
+        } else {
+            jwt.sign({ user }, process.env.ADMIN_ACCESS_TOKEN, (err, token) => {
+                if (err) {
+                    return res.status(401).json({ Message: "Login failed, Try again!" })
+                }
+                res.json({
+                    Message: "Welcome " + user.firstName + " " + user.lastName,
+                    Role: "Admin",
+                    token
+                })
+            })
+        }
+
     });
 
 }
