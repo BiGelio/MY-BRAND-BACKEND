@@ -38,7 +38,8 @@ export const createUser = (req, res) => {
         email: email,
         password: password,
         role: "member",
-        createdAt: createdAt
+        createdAt: createdAt,
+        updatedAt: Date(date.now())
     }
     var users = [];
     const data = usersModel.find((err, docs) => {
@@ -85,7 +86,13 @@ export const updateUser = (req, res) => {
                 }
             }
         )
-        const data = usersModel.findByIdAndUpdate({ _id: req.params.id }, { date: new Date() }, (err) => {
+        const valid = validateUser.validate(req.body);
+        if (valid.error) {
+            return res.status(400).json({ Message: valid.error.details[0].message });
+        }
+
+        const { firstName, lastName, email } = req.body;
+        const data = usersModel.findByIdAndUpdate({ _id: req.params.id }, { firstName: firstName, lastName: lastName, email: email, updatedAt: new Date() }, (err) => {
             if (err) {
                 return res.status(500).send("Your information does not updated, Try again!");
             }

@@ -20,8 +20,13 @@ const createUser = mongoose.Schema({
         type: String,
         required: true
     },
-    createdAt: { type: String,
-    required:true 
+    createdAt: {
+        type: String,
+        required: true
+    },
+    updatedAt: {
+        type: String,
+        required: true
     }
 
 });
