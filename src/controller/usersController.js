@@ -32,10 +32,9 @@ export const createUser = (req, res) => {
         return res.status(400).json({ Message: valid.error.details[0].message });
     }
 
-    const { firstName, lastName, email, password } = req.body;
+    const { fullName, email, password } = req.body;
     var user = {
-        firstName: firstName,
-        lastName: lastName,
+        fullName: fullName,
         email: email,
         password: password,
         role: "member",
@@ -58,8 +57,7 @@ export const createUser = (req, res) => {
         /*Lets create user account in our database*/
         const savedUser = newUser.save((err, response) => {
             if (err) {
-
-                return res.status(500).json({
+                return res.status(501).json({
                     Message: "Error ocurred during creation of user, try again !"
                 });
             }
@@ -158,8 +156,9 @@ export const loginUser = (req, res) => {
                     console.log(err)
                     return res.status(401).json({ Message: "Login failed, Try again!" })
                 }
-                res.status(200).json({
-                    Message: "Welcome " + user.firstName + " " + user.lastName,
+                res.json({
+                    Message: "Welcome " + user.fullName,
+
                     Role: "Admin",
                     token
                 })
