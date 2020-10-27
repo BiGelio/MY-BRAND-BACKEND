@@ -31,15 +31,14 @@ export const createUser = (req, res) => {
         return res.status(400).json({ Message: valid.error.details[0].message });
     }
 
-    const { firstName, lastName, email, password } = req.body;
+    const { fullName, email, password } = req.body;
     var user = {
-        firstName: firstName,
-        lastName: lastName,
+        fullName: fullName,
         email: email,
         password: password,
         role: "member",
         createdAt: createdAt,
-        updatedAt: Date(date.now())
+        updatedAt: Date(Date.now())
     }
     var users = [];
     const data = usersModel.find((err, docs) => {
@@ -57,7 +56,6 @@ export const createUser = (req, res) => {
         /*Lets create user account in our database*/
         const savedUser = newUser.save((err, response) => {
             if (err) {
-
                 return res.status(501).json({
                     Message: "Error ocurred during creation of user, try again !"
                 });
@@ -157,7 +155,7 @@ export const loginUser = (req, res) => {
                     return res.status(401).json({ Message: "Login failed, Try again!" })
                 }
                 res.json({
-                    Message: "Welcome " + user.firstName + " " + user.lastName,
+                    Message: "Welcome " + user.fullName,
                     Role: "Admin",
                     token
                 })
