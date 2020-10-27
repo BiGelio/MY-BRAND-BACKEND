@@ -28,6 +28,7 @@ export const createUser = (req, res) => {
     /* Validate user inputs*/
     const valid = validateUser.validate(req.body);
     if (valid.error) {
+        console.log(req.body)
         return res.status(400).json({ Message: valid.error.details[0].message });
     }
 
@@ -39,7 +40,7 @@ export const createUser = (req, res) => {
         password: password,
         role: "member",
         createdAt: createdAt,
-        updatedAt: Date(date.now())
+        updatedAt: Date(Date.now())
     }
     var users = [];
     const data = usersModel.find((err, docs) => {

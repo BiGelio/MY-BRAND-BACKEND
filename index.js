@@ -15,11 +15,12 @@ app.use('/api/user', usersRoute);
 app.use('/api/query', queriesRoute);
 import mongoose from "mongoose";
 
-mongoose.connect(process.env.DB_URL + "/articlesDatabase", { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
-    if (err) throw new err;
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+    if (err) { return console.log(err) }
     console.log("DB connected successfully!")
 });
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is listening on port number ${process.env.PORT}`)
 })
+export default app;
