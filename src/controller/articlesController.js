@@ -35,7 +35,8 @@ export const postArticle = async(req, res) => {
         createdAt: Date(Date.now())
     });
     var savePost = await posts.save().then((err) => {
-        if (err) {
+        if (!err) {
+            console.log(err);
             return res.status(500).json({
                 Message: "Failed to create article,try again!"
             })
@@ -48,6 +49,10 @@ export const postArticle = async(req, res) => {
 
 /* Controller update article request*/
 export const updateArticle = (req, res) => {
+    const valid = checkInputs.validate(req.body);
+    if (valid.error) {
+        return res.status(400).json({ Message: valid.error.details[0].message });
+    }
     jwt.verify(
         req.token,
         process.env.ADMIN_ACCESS_TOKEN, (err) => {
@@ -56,11 +61,8 @@ export const updateArticle = (req, res) => {
             }
         }
     )
-    const valid = checkInputs.validate(req.body);
-    if (valid.error) {
-        return res.status(400).json({ Message: valid.error.details[0].message });
-    }
-    const data = articlesModel.findByIdAndUpdate({ _id: req.params.id }, { title: req.body.title, description: req.body.title.description, updatedAt: new Date() }, (err) => {
+
+    const data = articlesModel.findByIdAndUpdate({ _id: req.params.id }, { title: req.body.title, description: req.body.description, updatedAt: new Date() }, (err) => {
         if (err) {
             return res.status(500).send("Error occurred n server,try again!");
         }

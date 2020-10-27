@@ -146,7 +146,7 @@ export const loginUser = (req, res) => {
                 if (err) {
                     return res.status(401).json({ Message: "Login failed, Try again!" })
                 }
-                res.json({
+                res.status(201).json({
                     Message: "Welcome " + user.firstName + " " + user.lastName,
                     Role: "member",
                     token
@@ -155,9 +155,10 @@ export const loginUser = (req, res) => {
         } else {
             jwt.sign({ user }, process.env.ADMIN_ACCESS_TOKEN, (err, token) => {
                 if (err) {
+                    console.log(err)
                     return res.status(401).json({ Message: "Login failed, Try again!" })
                 }
-                res.json({
+                res.status(200).json({
                     Message: "Welcome " + user.firstName + " " + user.lastName,
                     Role: "Admin",
                     token
