@@ -58,7 +58,7 @@ export const createUser = (req, res) => {
         const savedUser = newUser.save((err, response) => {
             if (err) {
 
-                return res.status(500).json({
+                return res.status(501).json({
                     Message: "Error ocurred during creation of user, try again !"
                 });
             }
