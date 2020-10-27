@@ -28,6 +28,7 @@ export const createUser = (req, res) => {
     /* Validate user inputs*/
     const valid = validateUser.validate(req.body);
     if (valid.error) {
+        console.log(req.body)
         return res.status(400).json({ Message: valid.error.details[0].message });
     }
 
@@ -143,7 +144,7 @@ export const loginUser = (req, res) => {
                 if (err) {
                     return res.status(401).json({ Message: "Login failed, Try again!" })
                 }
-                res.json({
+                res.status(201).json({
                     Message: "Welcome " + user.firstName + " " + user.lastName,
                     Role: "member",
                     token
@@ -152,10 +153,12 @@ export const loginUser = (req, res) => {
         } else {
             jwt.sign({ user }, process.env.ADMIN_ACCESS_TOKEN, (err, token) => {
                 if (err) {
+                    console.log(err)
                     return res.status(401).json({ Message: "Login failed, Try again!" })
                 }
                 res.json({
                     Message: "Welcome " + user.fullName,
+
                     Role: "Admin",
                     token
                 })
