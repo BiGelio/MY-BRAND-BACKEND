@@ -15,10 +15,9 @@ app.use('/api/user', usersRoute);
 app.use('/api/query', queriesRoute);
 import mongoose from "mongoose";
 
-mongoose.connect(process.env.DB_URL + "/articlesDatabase", { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
-    if (err) {
-        return console.log(err)
-    }
+
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+    if (err) { return console.log("DB failed connection!") }
     console.log("DB connected successfully!")
 });
 import swaggerUi from "swagger-ui-express";
@@ -144,3 +143,4 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.listen(process.env.PORT, () => {
     console.log(`Server is listening on port number ${process.env.PORT}`)
 })
+export default app;
