@@ -26,6 +26,7 @@ export const getUser = (req, res) => {
 export const createUser = (req, res) => {
     const createdAt = Date(Date.now());
     /* Validate user inputs*/
+    console.log(req.body)
     const valid = validateUser.validate(req.body);
     if (valid.error) {
         console.log(req.body)
@@ -102,8 +103,7 @@ export const updateUser = (req, res) => {
 
 export const deleteUser = (req, res) => {
     jwt.verify(
-        req.token,
-        process.env.ACCESS_TOKEN || process.env.ADMIN_ACCESS_TOKEN,
+        req.token, process.env.ADMIN_ACCESS_TOKEN,
         (err) => {
             if (err) {
                 return res.status(401).json({ Message: "Please login to delete your account!" })
@@ -156,7 +156,7 @@ export const loginUser = (req, res) => {
                     console.log(err)
                     return res.status(401).json({ Message: "Login failed, Try again!" })
                 }
-                res.json({
+                res.status(200).json({
                     Message: "Welcome " + user.fullName,
 
                     Role: "Admin",

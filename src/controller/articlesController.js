@@ -8,6 +8,7 @@ export const getArticle = async(req, res) => {
         if (err) {
             return res.status(500).json({ Message: "Error occurred on server!" })
         }
+        // return docs;
         res.status(200).send(docs);
     })
 }

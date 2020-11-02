@@ -28,9 +28,14 @@
         "mongoose": "^5.10.9"
     },
     "devDependencies": {
+
+        "nodemon": "^2.0.6",
+        "swagger-jsdoc": "^5.0.0",
+        "swagger-ui-express": "^4.1.4"
         "chai": "^4.2.0",
         "chai-http": "^4.3.0",
         "mocha": "^8.2.0",
         "nodemon": "^2.0.6"
+
     }
 }
