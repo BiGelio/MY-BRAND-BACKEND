@@ -1,10 +1,12 @@
 import express from "express";
 import verifyToken from "../TokenVerification/verifyTokens.js"
-import { getArticle, postArticle, updateArticle, deleteArticle } from "../controller/articlesController.js";
+import { getArticle, postArticle, updateArticle, deleteArticle, getOneArticle } from "../controller/articlesController.js";
 const routes = express.Router();
 
 /* Get request*/
 routes.get('/', getArticle);
+/* Post request*/
+routes.get('/:id', getOneArticle);
 
 /* Post request*/
 routes.post('/', verifyToken, postArticle);

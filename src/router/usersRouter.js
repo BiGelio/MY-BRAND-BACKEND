@@ -1,10 +1,11 @@
 import express from "express";
 import verifyToken from "../TokenVerification/verifyTokens.js"
-import { getUser, createUser, updateUser, deleteUser, loginUser } from "../controller/usersController.js";
+import { getUser, createUser, updateUser, deleteUser, loginUser, getOneUser } from "../controller/usersController.js";
 const routes = express.Router();
 
 /* Get request*/
 routes.get('/', verifyToken, getUser);
+routes.get('/:id', verifyToken, getOneUser);
 
 /*Post request*/
 routes.post('/', createUser);
