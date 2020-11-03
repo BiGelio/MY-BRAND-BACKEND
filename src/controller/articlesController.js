@@ -12,7 +12,15 @@ export const getArticle = async(req, res) => {
         res.status(200).send(docs);
     })
 }
-
+export const getOneArticle = async(req, res) => {
+    const data = await articlesModel.findOne({ _id: req.params.id }, (err, docs) => {
+        if (err) {
+            return res.status(500).json({ Message: "Error occurred on server!" })
+        }
+        // return docs;
+        res.status(200).send(docs);
+    })
+}
 
 /* Controller post article request*/
 export const postArticle = async(req, res) => {

@@ -63,8 +63,7 @@ export const getQueries = (req, res) => {
 export const deleteQuery = (req, res) => {
     /**Check if user has token required to access this router**/
     jwt.verify(
-        req.token,
-        process.env.ACCESS_TOKEN || process.env.ADMIN_ACCESS_TOKEN,
+        req.token, process.env.ADMIN_ACCESS_TOKEN,
         verifyUserBeforeDelete
     )
     queriesModel.remove({ _id: req.params.id }, (err) => {

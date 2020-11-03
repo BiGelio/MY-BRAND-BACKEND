@@ -118,6 +118,23 @@ export const deleteUser = (req, res) => {
 
     })
 }
+export const getOneUser = (req, res) => {
+    jwt.verify(
+        req.token, process.env.ADMIN_ACCESS_TOKEN,
+        (err) => {
+            if (err) {
+                return res.status(401).json({ Message: "Please login to access this account!" })
+            }
+        }
+    )
+    usersModel.findOne({ _id: req.params.id }, (err, docs) => {
+        if (err) {
+            return res.status(500).send("Server returned error!")
+        }
+        res.status(200).json(docs);
+
+    })
+}
 export const loginUser = (req, res) => {
     /*receiving data from request*/
     const { email, password } = req.body;
