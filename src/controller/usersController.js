@@ -108,6 +108,7 @@ export const deleteUser = (req, res) => {
                 return res.status(401).json({ Message: "Please login to delete your account!" })
             }
         }
+
     )
     usersModel.remove({ _id: req.params.id }, (err) => {
         if (err) {
