@@ -30,11 +30,12 @@ const options = {
             contact: {
                 name: "Bi Gelio",
                 url: "https://bigelio.github.io/MY-BRAND-BACKEND/UI/contact.html",
+
                 email: "bigelio77@gmail.com"
             }
         },
         servers: [{
-            url: "https://desolate-bayou-90268.herokuapp.com/"
+            url: "desolate-bayou-90268.herokuapp.com"
         }]
     },
     apis: ['index.js']
