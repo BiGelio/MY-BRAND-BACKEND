@@ -37,7 +37,8 @@ const options = {
         },
         servers: [{
             url: "desolate-bayou-90268.herokuapp.com"
-        }]
+        }],
+        schemes: ['http', 'https']
     },
     apis: ['index.js']
 };
